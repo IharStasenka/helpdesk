@@ -4,7 +4,6 @@ import com.training.istasenka.assembler.UserDtoAssembler;
 import com.training.istasenka.converter.user.UserConverter;
 import com.training.istasenka.dto.user.EngineerRatingDto;
 import com.training.istasenka.dto.user.UserDto;
-import com.training.istasenka.model.user.User;
 import com.training.istasenka.service.user.UserService;
 import lombok.AllArgsConstructor;
 import org.apache.logging.log4j.LogManager;
@@ -29,9 +28,9 @@ public class UserController {
     private final UserConverter userConverter;
 
     @PostMapping
-    public ResponseEntity<Long> save(@RequestBody User user) {
+    public ResponseEntity<Long> save(@RequestBody UserDto user) {
 
-        var savedUserId = userService.addUser(user);
+        var savedUserId = userService.addUser(userConverter.convertUserDtoToUser(user));
         var currentUri = ServletUriComponentsBuilder.fromCurrentRequestUri().toUriString();
         var savedUserLocation = currentUri + "/" + savedUserId;
 

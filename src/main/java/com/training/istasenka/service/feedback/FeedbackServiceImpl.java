@@ -72,7 +72,9 @@ public class FeedbackServiceImpl implements FeedbackService {
     @Autowired
     public void processKafkaStreamWithFeedback(StreamsBuilder streamsBuilder) {
         streamsBuilder
-                .stream(FEEDBACK_TOPIC.getTopicName(), Consumed.with(Serdes.String(), FeedbackKafkaDtoSerde.getInstance()).withOffsetResetPolicy(EARLIEST))
+                .stream(FEEDBACK_TOPIC.getTopicName(),
+                        Consumed.with(Serdes.String(),
+                        FeedbackKafkaDtoSerde.getInstance()).withOffsetResetPolicy(EARLIEST))
                 .foreach(this::saveFeedbackFromKafkaTopic);
     }
 
@@ -99,6 +101,7 @@ public class FeedbackServiceImpl implements FeedbackService {
 
 
     @Override
+    @Transactional
     public Feedback getFeedback(Long ticketId, Long feedbackId) {
         ticketService.validateTicketResourceById(ticketId);
         return feedbackRepository

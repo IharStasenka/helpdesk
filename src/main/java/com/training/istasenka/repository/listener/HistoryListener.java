@@ -30,9 +30,7 @@ public class HistoryListener implements PreInsertEventListener, PreUpdateEventLi
         registry.getEventListenerGroup(EventType.PRE_INSERT).appendListener(this);
         registry.getEventListenerGroup(EventType.PRE_UPDATE).appendListener(this);
         registry.getEventListenerGroup(EventType.PRE_DELETE).appendListener(this);
-
     }
-
 
     @Override
     public boolean onPreInsert(PreInsertEvent event) {
@@ -55,7 +53,6 @@ public class HistoryListener implements PreInsertEventListener, PreUpdateEventLi
         }
         return false;
     }
-
 
     @Override
     public boolean onPreUpdate(PreUpdateEvent preUpdateEvent) {
@@ -129,5 +126,4 @@ public class HistoryListener implements PreInsertEventListener, PreUpdateEventLi
                 .description(description)
                 .build();
     }
-
 }

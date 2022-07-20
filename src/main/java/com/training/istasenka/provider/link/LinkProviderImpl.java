@@ -7,8 +7,8 @@ import org.springframework.stereotype.Component;
 
 import static com.training.istasenka.model.ticket.Ticket_.*;
 import static com.training.istasenka.model.ticket.Ticket_.ATTACHMENTS;
-import static com.training.istasenka.repository.pagiablecomponent.PageableEntity.*;
-import static com.training.istasenka.repository.pagiablecomponent.PageableEntity.TICKET;
+import static com.training.istasenka.model.pagiablecomponent.PageableEntity.*;
+import static com.training.istasenka.model.pagiablecomponent.PageableEntity.TICKET;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 

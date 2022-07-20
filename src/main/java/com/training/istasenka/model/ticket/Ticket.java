@@ -9,6 +9,7 @@ import com.training.istasenka.util.StatusType;
 import com.training.istasenka.util.UrgencyType;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -39,6 +40,14 @@ import static javax.persistence.CascadeType.*;
 public class Ticket implements Serializable {
     @Id
     @GeneratedValue(generator = "ID_GENERATOR")
+    @GenericGenerator(name = "ID_GENERATOR",
+            strategy = "increment",
+            parameters = {
+                    @org.hibernate.annotations.Parameter(
+                            name = "sequence_name",
+                            value = "HD_SEQUENCE"
+                    )
+            })
     private Long id;
 
     @Column(nullable = false)

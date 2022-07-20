@@ -3,7 +3,7 @@ package com.training.istasenka.controller;
 import com.training.istasenka.assembler.HistoriesDtoAssembler;
 import com.training.istasenka.dto.HistoryDto;
 import com.training.istasenka.model.history.History;
-import com.training.istasenka.repository.pagiablecomponent.PageableEntity;
+import com.training.istasenka.model.pagiablecomponent.PageableEntity;
 import com.training.istasenka.provider.specification.pageable.pageable.PageableProvider;
 import com.training.istasenka.service.history.HistoryService;
 import com.training.istasenka.validator.fronttableparams.OrderByMatch;

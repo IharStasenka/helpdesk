@@ -26,7 +26,6 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final StreamsBuilderFactoryBean factoryBean;
 
-
     @Override
     @Transactional(readOnly = true)
     @Cacheable(cacheNames = "cache.users", key = "#email")

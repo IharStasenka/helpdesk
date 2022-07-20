@@ -35,7 +35,7 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 
-import static com.training.istasenka.repository.pagiablecomponent.PageableEntity.*;
+import static com.training.istasenka.model.pagiablecomponent.PageableEntity.*;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.http.HttpStatus.*;
 import static org.springframework.http.MediaType.*;

@@ -1,5 +1,6 @@
 package com.training.istasenka.service.feedback;
 
+import com.training.istasenka.annotation.MailAudit;
 import com.training.istasenka.converter.feedback.FeedbackKafkaConverter;
 import com.training.istasenka.deserializer.kafka.EngineerRatingSerde;
 import com.training.istasenka.deserializer.kafka.FeedbackKafkaDtoSerde;
@@ -70,6 +71,7 @@ public class FeedbackServiceImpl implements FeedbackService {
 
     @Transactional
     @Autowired
+    @MailAudit
     public void processKafkaStreamWithFeedback(StreamsBuilder streamsBuilder) {
         streamsBuilder
                 .stream(FEEDBACK_TOPIC.getTopicName(),
@@ -109,7 +111,7 @@ public class FeedbackServiceImpl implements FeedbackService {
                 .orElseThrow(() -> new FeedbackNotFoundException(String.format("No such feedback with id %d", feedbackId)));
     }
 
-    private void saveFeedbackFromKafkaTopic(String key, FeedbackKafkaDto feedbackKafkaDto) {
+    public void saveFeedbackFromKafkaTopic(String key, FeedbackKafkaDto feedbackKafkaDto) {
         Feedback feedback = feedbackKafkaConverter.convertFromFeedbackDtoToFeedback(feedbackKafkaDto);
         var ticket = ticketService.getTicketByIdByEmail(feedbackKafkaDto.getTicketId(), feedbackKafkaDto.getOwnerEmail());
         feedback.setTicket(ticket);

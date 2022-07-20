@@ -1,4 +1,4 @@
-package com.training.istasenka.service.history.audit;
+package com.training.istasenka.service.mailing;
 
 import lombok.AllArgsConstructor;
 import org.aspectj.lang.JoinPoint;
@@ -11,21 +11,25 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 @Aspect
 @AllArgsConstructor
 @Component
-public class HistoryStoringAspect implements TransactionSynchronization {
+public class MailSendingAspect implements TransactionSynchronization {
 
-    private final HistoryAuditService historyAuditService;
+    private final MailingService mailingService;
 
-    @Before("execution(* *.*(..)) && @annotation(com.training.istasenka.annotation.HistoryAudit)")
+    @Before("execution(* *.*(..)) && @annotation(com.training.istasenka.annotation.MailAudit)")
     public void registerTransactionSynchronizationManager(JoinPoint jp) {
         TransactionSynchronizationManager.registerSynchronization(this);
     }
 
     @Override
     public void afterCommit() {
-        historyAuditService.getHistoryAuditEvents();
+        mailingService.getMailingAuditEvents();
         if (!TransactionSynchronizationManager.isCurrentTransactionReadOnly()
                 && TransactionSynchronizationManager.isActualTransactionActive()) {
-            historyAuditService.getHistoryAuditEvents().forEach(historyAuditService::save);
+            var mailingAuditEvents = mailingService.getMailingAuditEvents();
+            mailingAuditEvents
+                    .stream()
+                    .map(mi -> mailingService.buildMailDatas(mi.getTicket(), mi.getMailTemplateType()))
+                    .forEach(mailingService::sendEmails);
         }
     }
 }

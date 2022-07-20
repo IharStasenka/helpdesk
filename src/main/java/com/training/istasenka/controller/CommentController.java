@@ -6,7 +6,7 @@ import com.training.istasenka.dto.CommentDto;
 import com.training.istasenka.dto.validationgroups.CreateInfo;
 import com.training.istasenka.dto.validationgroups.UpdateInfo;
 import com.training.istasenka.model.comment.Comment;
-import com.training.istasenka.repository.pagiablecomponent.PageableEntity;
+import com.training.istasenka.model.pagiablecomponent.PageableEntity;
 import com.training.istasenka.provider.specification.pageable.pageable.PageableProvider;
 import com.training.istasenka.service.comment.CommentService;
 import com.training.istasenka.validator.fronttableparams.OrderByMatch;

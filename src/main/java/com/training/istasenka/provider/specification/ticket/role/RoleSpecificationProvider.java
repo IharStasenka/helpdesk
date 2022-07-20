@@ -9,5 +9,4 @@ public interface RoleSpecificationProvider {
     Specification<Ticket> getSpecificationForFindAllTickets(String username, Boolean myTicketFilterStatus);
 
     UserRole getUserRole();
-
 }

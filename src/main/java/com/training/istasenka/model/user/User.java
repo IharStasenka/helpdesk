@@ -1,6 +1,5 @@
 package com.training.istasenka.model.user;
 
-import com.training.istasenka.model.customjwt.CustomJwt;
 import com.training.istasenka.util.UserRole;
 import lombok.*;
 import org.hibernate.annotations.NaturalId;
@@ -8,11 +7,7 @@ import org.hibernate.annotations.NaturalIdCache;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Objects;
-
-import static javax.persistence.CascadeType.PERSIST;
 
 @Entity
 @Table(name = "USERS")
@@ -23,6 +18,9 @@ import static javax.persistence.CascadeType.PERSIST;
 @Getter
 @NaturalIdCache(region = "cache.users")
 public class User implements Serializable {
+
+    private static final long serialVersionUID = 42L;
+
     @Id
     @GeneratedValue(generator = "ID_GENERATOR")
     @Column(name = "user_id")
@@ -44,10 +42,6 @@ public class User implements Serializable {
     @Column(name = "email", nullable = false, unique = true)
     @NaturalId
     private String email;
-
-    @Column()
-    @OneToMany(mappedBy = "user", cascade = PERSIST)
-    private List<CustomJwt> userTokens = new LinkedList<>();
 
     @Override
     public String toString() {

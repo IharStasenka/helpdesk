@@ -1,4 +1,4 @@
-package com.training.istasenka.repository.pagiablecomponent;
+package com.training.istasenka.model.pagiablecomponent;
 
 import com.training.istasenka.exception.CustomIllegalArgumentException;
 import com.training.istasenka.model.comment.Comment;

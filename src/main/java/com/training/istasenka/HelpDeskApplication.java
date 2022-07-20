@@ -1,7 +1,9 @@
 package com.training.istasenka;
 
 import com.training.istasenka.provider.kafkatopic.TopicProvider;
+import com.training.istasenka.provider.specification.mailrecepients.MailTemplateRecipientSpecificationProvider;
 import com.training.istasenka.provider.specification.ticket.role.RoleSpecificationProvider;
+import com.training.istasenka.util.MailTemplateType;
 import com.training.istasenka.util.UserRole;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +37,10 @@ public class HelpDeskApplication {
     }
 
     @Autowired
-    private List<RoleSpecificationProvider> specificationProviders;
+    private List<RoleSpecificationProvider> userRoleSpecificationProviders;
+
+    @Autowired
+    private List<MailTemplateRecipientSpecificationProvider> mailTemplateRecipientSpecificationProviders;
 
     @Autowired
     private TopicProvider topicProvider;
@@ -48,8 +53,17 @@ public class HelpDeskApplication {
     }
 
     @Bean
-    public Map<UserRole, RoleSpecificationProvider> getSpecificationProviders() {
-        return specificationProviders.stream().collect(Collectors.toMap(RoleSpecificationProvider::getUserRole, Function.identity()));
+    public Map<MailTemplateType, MailTemplateRecipientSpecificationProvider> getMailTemplateRecipientSpecificationProvider() {
+        return mailTemplateRecipientSpecificationProviders
+                .stream()
+                .collect(Collectors.toMap(MailTemplateRecipientSpecificationProvider::getMailTemplateType, Function.identity()));
+    }
+
+    @Bean
+    public Map<UserRole, RoleSpecificationProvider> getUserRoleSpecificationProviders() {
+        return userRoleSpecificationProviders
+                .stream()
+                .collect(Collectors.toMap(RoleSpecificationProvider::getUserRole, Function.identity()));
     }
 
     @Bean

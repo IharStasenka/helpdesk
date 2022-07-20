@@ -1,6 +1,6 @@
 package com.training.istasenka.provider.specification.pageable.pageable;
 
-import com.training.istasenka.repository.pagiablecomponent.PageableEntity;
+import com.training.istasenka.model.pagiablecomponent.PageableEntity;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 

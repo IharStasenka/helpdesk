@@ -4,9 +4,12 @@ import com.training.istasenka.model.user.User;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.hateoas.Link;
 
+import java.util.Arrays;
+import java.util.Optional;
+
 import static com.training.istasenka.util.StatusType.*;
 
-public enum TicketMailingType {
+public enum MailTemplateType {
 
     TEMPLATE_1(NEW, DRAFT, DECLINED) {
         @Override
@@ -112,7 +115,7 @@ public enum TicketMailingType {
     private final StatusType[] currentStatuses;
     private final StatusType newStatus;
 
-    TicketMailingType(StatusType newStatus, StatusType... currentStatuses) {
+    MailTemplateType(StatusType newStatus, StatusType... currentStatuses) {
         this.currentStatuses = currentStatuses;
         this.newStatus = newStatus;
     }
@@ -129,12 +132,14 @@ public enum TicketMailingType {
         return Strings.EMPTY;
     }
 
-
     public String getMailBody(User user, Link link) {
         return Strings.EMPTY;
     }
 
-
-
-
+    public static Optional<MailTemplateType> getTemplateByStatuses(StatusType newStatus, StatusType oldStatus) {
+        return Arrays
+                .stream(MailTemplateType.values())
+                .filter(mt -> Arrays.asList(mt.getCurrentStatuses()).contains(oldStatus) && mt.getNewStatus().equals(newStatus))
+                .findFirst();
+    }
 }

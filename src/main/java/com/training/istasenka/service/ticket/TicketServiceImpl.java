@@ -1,6 +1,7 @@
 package com.training.istasenka.service.ticket;
 
 import com.training.istasenka.annotation.HistoryAudit;
+import com.training.istasenka.annotation.MailAudit;
 import com.training.istasenka.exception.CustomIllegalArgumentException;
 import com.training.istasenka.exception.IllegalTicketStatusTransitionException;
 import com.training.istasenka.exception.TicketNotFoundException;
@@ -44,7 +45,7 @@ public class  TicketServiceImpl implements TicketService {
 
     private final TicketRepository ticketRepository;
     private final UserService userService;
-    private final Map<UserRole, RoleSpecificationProvider> specificationProvider;
+    private final Map<UserRole, RoleSpecificationProvider> userRoleSpecificationProviders;
     private final CategoryService categoryService;
 
     @Override
@@ -135,6 +136,7 @@ public class  TicketServiceImpl implements TicketService {
     @Override
     @Transactional
     @HistoryAudit
+    @MailAudit
     @CacheEvict(cacheNames = "cache.tickets", key = "#id.toString().concat('-').concat(@cacheKeyProvider.getUsernameKey())")
     public void updateTicketStatus(Long id, TicketActionType action) {
         var ticket = getTicketById(id);
@@ -223,7 +225,7 @@ public class  TicketServiceImpl implements TicketService {
 
     private Specification<Ticket> getContextUserByRoleSpecification(Boolean myTicketFilterStatus, User contextUser) {
 
-        return specificationProvider
+        return userRoleSpecificationProviders
                 .get(contextUser.getRole())
                 .getSpecificationForFindAllTickets(contextUser.getEmail(), myTicketFilterStatus);
     }

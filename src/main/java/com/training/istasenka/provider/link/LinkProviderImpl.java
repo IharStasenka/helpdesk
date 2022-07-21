@@ -1,14 +1,16 @@
 package com.training.istasenka.provider.link;
 
 import com.training.istasenka.controller.*;
+import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.util.Strings;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.hateoas.Link;
 import org.springframework.stereotype.Component;
 
-import static com.training.istasenka.model.ticket.Ticket_.*;
-import static com.training.istasenka.model.ticket.Ticket_.ATTACHMENTS;
+import java.net.URI;
+
 import static com.training.istasenka.model.pagiablecomponent.PageableEntity.*;
-import static com.training.istasenka.model.pagiablecomponent.PageableEntity.TICKET;
+import static com.training.istasenka.model.ticket.Ticket_.*;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
@@ -17,6 +19,11 @@ public class LinkProviderImpl implements LinkProvider {
 
     private static final String DOWNLOADS = "downloads";
     private static final String TICKETS = "tickets";
+    private @Value("${server.servlet.context-path}")
+    String contextPath;
+    private @Value("${server.port}")
+    String port;
+
 
     @Override
     public Link getDefaultTicketPageLink() {
@@ -34,6 +41,12 @@ public class LinkProviderImpl implements LinkProvider {
     @Override
     public Link getTicketLink(Long ticketId) {
         return linkTo(methodOn(TicketController.class).getTicketById(ticketId)).withSelfRel();
+    }
+
+    @Override
+    public Link getTicketLinkForFeedback(Long ticketId) {
+        var uri = getTicketLink(ticketId).toUri().toASCIIString();
+        return Link.of("http://localhost:" + port + contextPath + uri);
     }
 
     @Override

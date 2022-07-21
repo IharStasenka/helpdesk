@@ -21,8 +21,8 @@ public enum MailTemplateType {
         public String getMailBody(User user, Link link) {
             return String.format("Dear Managers,\n" +
                     "\n" +
-                    "New ticket %S is waiting for your approval.\n",
-                    link.toString());
+                    "New ticket %s is waiting for your approval.\n",
+                    link.toUri());
         }
     },
     TEMPLATE_2(APPROVED, NEW) {
@@ -37,7 +37,7 @@ public enum MailTemplateType {
             return String.format("Dear Users,\n" +
                     "\n" +
                     "Ticket %s was approved by the Manager.\n",
-                    link.toString());
+                    link.toUri());
         }
     },
     TEMPLATE_3(DECLINED, NEW){
@@ -51,7 +51,7 @@ public enum MailTemplateType {
             return String.format("Dear %s %s,\n" +
                     "\n" +
                     "Ticket %s was declined by the Manager\n",
-                    user.getFirstName(), user.getLastName(), link.toString());
+                    user.getFirstName(), user.getLastName(), link.toUri());
         }
     },
     TEMPLATE_4(CANCELED, NEW) {
@@ -65,7 +65,7 @@ public enum MailTemplateType {
             return String.format("Dear %s %s,\n" +
                     "\n" +
                     "Ticket %s was canceled by the Manager\n",
-                    user.getFirstName(), user.getLastName(), link.toString());
+                    user.getFirstName(), user.getLastName(), link.toUri());
         }
     },
     TEMPLATE_5(CANCELED, APPROVED){
@@ -79,7 +79,7 @@ public enum MailTemplateType {
             return String.format("Dear Users,\n" +
                     "\n" +
                     "Ticket %s was canceled by the Engineer\n",
-                    link.toString());
+                    link.toUri());
         }
     },
     TEMPLATE_6(StatusType.DONE, IN_PROGRESS){
@@ -94,7 +94,7 @@ public enum MailTemplateType {
                     "\n" +
                     "Ticket %s was done by the Engineer.\n" +
                     "Please provide your feedback by clicking on the ticket ID\n",
-                    user.getFirstName(), user.getLastName(), link.toString());
+                    user.getFirstName(), user.getLastName(), link.toUri());
         }
     },
     TEMPLATE_7(StatusType.DONE, StatusType.DONE){
@@ -108,7 +108,7 @@ public enum MailTemplateType {
             return String.format("Dear %s %s,\n" +
                             "\n" +
                             "The feedback was provided on the ticket %s.\n",
-                    user.getFirstName(), user.getLastName(), link.toString());
+                    user.getFirstName(), user.getLastName(), link.toUri());
         }
     };
 

@@ -9,7 +9,7 @@ import lombok.Data;
 @AllArgsConstructor
 @Builder
 @Data
-public class MailingInput {
+public class MailingInfo{
     private Ticket ticket;
     private MailTemplateType mailTemplateType;
 }

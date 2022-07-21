@@ -30,6 +30,7 @@ import static com.training.istasenka.util.KafkaTopicType.FEEDBACK_TOPIC;
 @EnableCaching
 @EnableKafka
 @EnableKafkaStreams
+
 public class HelpDeskApplication {
 
     public static void main(String[] args) {

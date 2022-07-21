@@ -23,4 +23,6 @@ public interface LinkProvider {
     Link getHistoryLink(Long ticketId, Long historyId);
 
     Link getUserLink(String username);
+
+    Link getTicketLinkForFeedback(Long ticketId);
 }

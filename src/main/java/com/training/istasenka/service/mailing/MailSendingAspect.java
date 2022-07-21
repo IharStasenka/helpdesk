@@ -26,10 +26,7 @@ public class MailSendingAspect implements TransactionSynchronization {
         if (!TransactionSynchronizationManager.isCurrentTransactionReadOnly()
                 && TransactionSynchronizationManager.isActualTransactionActive()) {
             var mailingAuditEvents = mailingService.getMailingAuditEvents();
-            mailingAuditEvents
-                    .stream()
-                    .map(mi -> mailingService.buildMailDatas(mi.getTicket(), mi.getMailTemplateType()))
-                    .forEach(mailingService::sendEmails);
+            mailingAuditEvents.stream().map(mailingService::buildMailDatas).forEach(mailingService::sendEmails);
         }
     }
 }

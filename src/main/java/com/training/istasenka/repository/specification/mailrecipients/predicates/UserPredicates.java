@@ -19,7 +19,7 @@ public class UserPredicates {
     }
 
     public Predicate getAssignee(Root<User> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder, Long ticketId) {
-        var ticketRoot = query.from(Ticket.class);
+        var ticketRoot = query.distinct(true).from(Ticket.class);
         return criteriaBuilder.and(
                 criteriaBuilder.equal(ticketRoot.get(Ticket_.id), ticketId),
                 criteriaBuilder.equal(ticketRoot.get(Ticket_.assignee).get(User_.userId), root.get(User_.userId))
@@ -27,7 +27,7 @@ public class UserPredicates {
     }
 
     public Predicate getOwner(Root<User> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder, Long ticketId) {
-        var ticketRoot = query.from(Ticket.class);
+        var ticketRoot = query.distinct(true).from(Ticket.class);
         return criteriaBuilder.and(
                 criteriaBuilder.equal(ticketRoot.get(Ticket_.id), ticketId),
                 criteriaBuilder.equal(ticketRoot.get(Ticket_.owner).get(User_.userId), root.get(User_.userId))
@@ -35,7 +35,7 @@ public class UserPredicates {
     }
 
     public Predicate getApprover(Root<User> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder, Long ticketId) {
-        var ticketRoot = query.from(Ticket.class);
+        var ticketRoot = query.distinct(true).from(Ticket.class);
         return criteriaBuilder.and(
                 criteriaBuilder.equal(ticketRoot.get(Ticket_.id), ticketId),
                 criteriaBuilder.equal(ticketRoot.get(Ticket_.approver).get(User_.userId), root.get(User_.userId))

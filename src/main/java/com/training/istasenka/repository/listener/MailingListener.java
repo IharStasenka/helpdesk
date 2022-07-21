@@ -1,7 +1,7 @@
 package com.training.istasenka.repository.listener;
 
 import com.training.istasenka.model.feedback.Feedback;
-import com.training.istasenka.model.mailing.MailingInput;
+import com.training.istasenka.model.mailing.MailingInfo;
 import com.training.istasenka.model.ticket.Ticket;
 import com.training.istasenka.service.mailing.MailingService;
 import com.training.istasenka.util.MailTemplateType;
@@ -65,7 +65,7 @@ public class MailingListener implements PreInsertEventListener, PreUpdateEventLi
 
     private void addMailingEvent(Ticket ticket, MailTemplateType mailTemplate) {
         mailingService.getMailingAuditEvents().add(
-                MailingInput
+                MailingInfo
                         .builder()
                         .ticket(ticket)
                         .mailTemplateType(mailTemplate)

@@ -15,7 +15,7 @@ import com.training.istasenka.provider.specification.ticket.role.RoleSpecificati
 import com.training.istasenka.repository.specification.ticket.TicketIdSpecification;
 import com.training.istasenka.repository.ticket.TicketRepository;
 import com.training.istasenka.service.category.CategoryService;
-import com.training.istasenka.service.user.UserService;
+import com.training.istasenka.service.user.db.UserService;
 import com.training.istasenka.util.StatusType;
 import com.training.istasenka.util.TicketActionType;
 import com.training.istasenka.util.UserRole;

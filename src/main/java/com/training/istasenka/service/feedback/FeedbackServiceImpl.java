@@ -9,7 +9,7 @@ import com.training.istasenka.model.feedback.Feedback;
 import com.training.istasenka.model.user.User;
 import com.training.istasenka.repository.feedback.FeedbackRepository;
 import com.training.istasenka.service.ticket.TicketService;
-import com.training.istasenka.service.user.UserService;
+import com.training.istasenka.service.user.db.UserService;
 import com.training.istasenka.util.StatusType;
 import lombok.AllArgsConstructor;
 import org.springframework.kafka.core.KafkaTemplate;

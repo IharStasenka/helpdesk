@@ -8,7 +8,7 @@ import com.training.istasenka.repository.comment.CommentRepository;
 import com.training.istasenka.provider.specification.pageable.pageable.PaginationProviderImpl;
 import com.training.istasenka.provider.specification.comment.CommentSpecificationProvider;
 import com.training.istasenka.service.ticket.TicketService;
-import com.training.istasenka.service.user.UserService;
+import com.training.istasenka.service.user.db.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

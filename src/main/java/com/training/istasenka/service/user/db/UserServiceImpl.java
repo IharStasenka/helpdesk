@@ -1,4 +1,4 @@
-package com.training.istasenka.service.user;
+package com.training.istasenka.service.user.db;
 
 import com.training.istasenka.dto.user.EngineerRatingDto;
 import com.training.istasenka.exception.CustomIllegalArgumentException;

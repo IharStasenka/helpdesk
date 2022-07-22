@@ -4,7 +4,7 @@ import com.training.istasenka.assembler.UserDtoAssembler;
 import com.training.istasenka.converter.user.UserConverter;
 import com.training.istasenka.dto.user.EngineerRatingDto;
 import com.training.istasenka.dto.user.UserDto;
-import com.training.istasenka.service.user.UserService;
+import com.training.istasenka.service.user.db.UserService;
 import lombok.AllArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

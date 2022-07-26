@@ -6,4 +6,8 @@ public interface KeycloakUserService {
 
     void postUser(User user);
 
+    void deleteUser( User user);
+
+    void changePassword();
+
 }

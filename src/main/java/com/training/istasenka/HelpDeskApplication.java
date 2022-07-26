@@ -9,7 +9,6 @@ import io.netty.channel.ChannelOption;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import io.netty.handler.timeout.WriteTimeoutHandler;
 import org.apache.kafka.clients.admin.NewTopic;
-import org.keycloak.OAuth2Constants;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +35,7 @@ import java.util.stream.Collectors;
 
 import static com.training.istasenka.util.KafkaTopicType.ENGINEER_RATING_TOPIC;
 import static com.training.istasenka.util.KafkaTopicType.FEEDBACK_TOPIC;
-import static org.keycloak.OAuth2Constants.*;
+import static org.keycloak.OAuth2Constants.CLIENT_CREDENTIALS;
 
 @SpringBootApplication
 @EnableScheduling
@@ -110,15 +109,13 @@ public class HelpDeskApplication {
             @Value("${keycloak.auth-server-url}") String url,
             @Value("${keycloak.resource}") String clientId,
             @Value("${keycloak.realm}") String realm,
-            @Value("${keycloak.credentials.secret}") String secret,
-            @Value("${keycloak.credentials.username}") String username) {
+            @Value("${keycloak.credentials.secret}") String secret) {
         return KeycloakBuilder.builder()
-                .grantType(PASSWORD)
+                .grantType(CLIENT_CREDENTIALS)
                 .serverUrl(url)
                 .realm(realm)
                 .clientId(clientId)
-                .username(username)
-                .password(secret)
+                .clientSecret(secret)
                 .build();
     }
 }

@@ -10,5 +10,7 @@ import org.mapstruct.Mapping;
 @DecoratedWith(UserKeycloakConverterDecorator.class)
 public interface UserKeycloakConverter {
 
+    @Mapping(target = "email", source = "email")
+    @Mapping(target = "username", source = "email")
     UserRepresentation convertUserToKeycloakUser(User user);
 }

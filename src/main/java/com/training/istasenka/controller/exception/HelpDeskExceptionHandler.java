@@ -1,7 +1,5 @@
 package com.training.istasenka.controller.exception;
 
-import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.training.istasenka.converter.message.MessageConverter;
 import com.training.istasenka.dto.messages.MessagesDto;
 import com.training.istasenka.exception.CustomIllegalArgumentException;
@@ -9,6 +7,7 @@ import com.training.istasenka.exception.IllegalTicketStatusTransitionException;
 import lombok.AllArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.keycloak.authorization.client.util.HttpResponseException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -46,11 +45,11 @@ public class HelpDeskExceptionHandler {
     }
 
 
-    @ExceptionHandler(value = {JWTVerificationException.class, TokenExpiredException.class})
-    public ResponseEntity<MessagesDto> getJWTVerification(Exception exception) {
+    @ExceptionHandler(value = {HttpResponseException.class})
+    public ResponseEntity<MessagesDto> getJWTVerification(HttpResponseException exception) {
         var errorMessage = exception.getMessage();
         var errorMessageDto = messageConverter.fromMessage(errorMessage, ERROR);
-        logger.info(String.format("in the getJWTVerification with exception: %s", errorMessage));
+        logger.info(String.format("in the keycloak response with exception: %s", errorMessage));
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).contentType(MediaType.APPLICATION_JSON).body(errorMessageDto);
     }
 

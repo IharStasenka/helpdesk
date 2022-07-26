@@ -4,6 +4,7 @@ import com.training.istasenka.dto.user.EngineerRatingDto;
 import com.training.istasenka.exception.CustomIllegalArgumentException;
 import com.training.istasenka.model.user.User;
 import com.training.istasenka.repository.user.UserRepository;
+import com.training.istasenka.service.user.keycloak.KeycloakUserService;
 import lombok.AllArgsConstructor;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StoreQueryParameters;
@@ -24,6 +25,7 @@ import java.util.List;
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+    private final KeycloakUserService keycloakUserService;
     private final StreamsBuilderFactoryBean factoryBean;
 
     @Override
@@ -38,6 +40,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @CacheEvict(cacheNames = "cache.users", allEntries = true)
     public Long addUser(User user) {
+        keycloakUserService.postUser(user);
         return userRepository.save(user).getUserId();
     }
 
@@ -52,6 +55,8 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @CacheEvict(cacheNames = "cache.users", key = "#email")
     public void deleteUser(String email) {
+        var user = getUser(email);
+        keycloakUserService.deleteUser(user);
         userRepository.deleteById(getUser(email).getUserId());
     }
 

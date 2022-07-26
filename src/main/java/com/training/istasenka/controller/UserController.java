@@ -28,9 +28,9 @@ public class UserController {
     private final UserConverter userConverter;
 
     @PostMapping
-    public ResponseEntity<Long> save(@RequestBody UserDto user) {
+    public ResponseEntity<Long> save(@RequestBody UserDto userDto) {
 
-        var savedUserId = userService.addUser(userConverter.convertUserDtoToUser(user));
+        var savedUserId = userService.addUser(userConverter.convertUserDtoToUser(userDto));
         var currentUri = ServletUriComponentsBuilder.fromCurrentRequestUri().toUriString();
         var savedUserLocation = currentUri + "/" + savedUserId;
 

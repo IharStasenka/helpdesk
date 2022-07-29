@@ -75,8 +75,7 @@ public class KeycloakUserServiceImpl implements KeycloakUserService {
     }
 
     private UserLoginDto getUserLoginDto(PasswordChange passwordChangeData, String username) {
-        var userLoginDto = UserLoginDto.builder().username(username).password(passwordChangeData.getOldPassword()).build();
-        return userLoginDto;
+        return UserLoginDto.builder().username(username).password(passwordChangeData.getOldPassword()).build();
     }
 
     private CredentialRepresentation getCredentialRepresentation(PasswordChange passwordChangeData) {

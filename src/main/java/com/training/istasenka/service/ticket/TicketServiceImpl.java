@@ -50,7 +50,7 @@ public class  TicketServiceImpl implements TicketService {
 
     @Override
     @Transactional
-    @Cacheable(cacheNames = "cache.tickets", key = "#id.toString().concat('-').concat(@cacheKeyProvider.getUsernameKey())")
+    @Cacheable(cacheNames = "cache.tickets", key = "#id.toString().concat('-').concat(@contextUsernameProvider.getUsername())")
     public Boolean validateTicketResourceById(Long id) {
         ticketRepository.findById(id)
                 .orElseThrow(() -> new TicketNotFoundException(String.format("There are no ticket with id: %d", id)));
@@ -108,7 +108,7 @@ public class  TicketServiceImpl implements TicketService {
     @Override
     @Transactional
     @HistoryAudit
-    @CacheEvict(cacheNames = "cache.tickets", key = "#id.toString().concat('-').concat(@cacheKeyProvider.getUsernameKey())")
+    @CacheEvict(cacheNames = "cache.tickets", key = "#id.toString().concat('-').concat(@contextUsernameProvider.getUsername())")
     public void updateTicket(Ticket ticket, List<Attachment> attachments, Long id) {
         if (!id.equals(ticket.getId())) {
             throw new CustomIllegalArgumentException("Mismatch of ticket id, and id in path variable");
@@ -127,7 +127,7 @@ public class  TicketServiceImpl implements TicketService {
 
     @Override
     @Transactional
-    @CacheEvict(cacheNames = "cache.tickets", key = "#id.toString().concat('-').concat(@cacheKeyProvider.getUsernameKey())")
+    @CacheEvict(cacheNames = "cache.tickets", key = "#id.toString().concat('-').concat(@contextUsernameProvider.getUsername())")
     public void deleteTicket(Long id) {
         Ticket ticket = getTicketById(id);
         ticketRepository.delete(ticket);
@@ -137,7 +137,7 @@ public class  TicketServiceImpl implements TicketService {
     @Transactional
     @HistoryAudit
     @MailAudit
-    @CacheEvict(cacheNames = "cache.tickets", key = "#id.toString().concat('-').concat(@cacheKeyProvider.getUsernameKey())")
+    @CacheEvict(cacheNames = "cache.tickets", key = "#id.toString().concat('-').concat(@contextUsernameProvider.getUsername())")
     public void updateTicketStatus(Long id, TicketActionType action) {
         var ticket = getTicketById(id);
         var contextUser = getUserFromSecurityContext();

@@ -43,11 +43,12 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
                 .antMatchers(PUT, "/tickets/{id}").hasAnyRole(EMPLOYEE.name(), MANAGER.name())
                 .antMatchers(PATCH, "/tickets/{id}").hasAnyRole(EMPLOYEE.name(), MANAGER.name())
                 .antMatchers(DELETE, "/tickets/{id}").hasAnyRole(EMPLOYEE.name(), MANAGER.name())
-                .antMatchers(POST, "/users").hasAnyRole(EMPLOYEE.name())
                 .antMatchers(PUT, "/users/{id}").hasAnyRole(EMPLOYEE.name())
                 .antMatchers(DELETE, "/users/{name}").hasAnyRole(EMPLOYEE.name())
                 .antMatchers(GET, "/users/engineers/{name}/rating").hasAnyRole(EMPLOYEE.name(), MANAGER.name())
                 .antMatchers(GET, "/tickets/{ticket_id}/feedbacks/").hasRole(ENGINEER.name())
+                .antMatchers(GET, "/users/login").permitAll()
+                .antMatchers(POST, "/users").permitAll()
                 .anyRequest().authenticated();
         http.csrf().disable();
     }

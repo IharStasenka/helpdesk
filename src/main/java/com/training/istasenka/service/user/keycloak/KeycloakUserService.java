@@ -1,6 +1,9 @@
 package com.training.istasenka.service.user.keycloak;
 
+import com.training.istasenka.dto.user.PasswordChange;
+import com.training.istasenka.dto.user.UserLoginDto;
 import com.training.istasenka.model.user.User;
+import org.keycloak.representations.AccessTokenResponse;
 
 public interface KeycloakUserService {
 
@@ -8,6 +11,8 @@ public interface KeycloakUserService {
 
     void deleteUser( User user);
 
-    void changePassword();
+    AccessTokenResponse getAccessToken(UserLoginDto userLoginDto);
+
+    void changePassword(PasswordChange passwordChangeData, String username);
 
 }

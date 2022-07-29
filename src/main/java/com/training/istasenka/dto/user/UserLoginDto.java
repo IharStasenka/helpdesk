@@ -1,33 +1,18 @@
 package com.training.istasenka.dto.user;
 
+import com.training.istasenka.validator.user.Password;
+import lombok.*;
+
 import javax.validation.constraints.Email;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@EqualsAndHashCode(callSuper = false)
 public class UserLoginDto {
     @Email
     private String username;
+    @Password
     private String password;
-
-    public UserLoginDto() {
-    }
-
-    public UserLoginDto(String username, String password) {
-        this.username = username;
-        this.password = password;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 }

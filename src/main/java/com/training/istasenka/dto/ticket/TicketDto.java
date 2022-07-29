@@ -24,7 +24,6 @@ import java.util.List;
 
 import static com.fasterxml.jackson.annotation.JsonProperty.Access;
 
-
 @EqualsAndHashCode(callSuper = false)
 @Data
 @Builder

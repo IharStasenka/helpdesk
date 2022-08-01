@@ -9,7 +9,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface PasswordsMatch {
-    String message() default "Fields values don't match!";
+    String message();
     String password();
     String confirmPassword();
 

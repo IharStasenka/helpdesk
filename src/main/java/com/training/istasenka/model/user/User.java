@@ -36,9 +36,6 @@ public class User implements Serializable {
     @Enumerated(value = EnumType.STRING)
     private UserRole role;
 
-    @Column(name = "password")
-    private String password;
-
     @Column(name = "email", nullable = false, unique = true)
     @NaturalId
     private String email;

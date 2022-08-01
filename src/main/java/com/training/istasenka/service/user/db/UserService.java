@@ -1,6 +1,7 @@
 package com.training.istasenka.service.user.db;
 
 import com.training.istasenka.dto.user.EngineerRatingDto;
+import com.training.istasenka.dto.user.UserDto;
 import com.training.istasenka.model.user.User;
 
 import java.util.List;
@@ -8,7 +9,7 @@ import java.util.List;
 public interface UserService {
     User getUser(String email);
 
-    Long addUser(User user);
+    Long addUser(UserDto user);
 
     List<User> getUsers(int amountOfUsers, Long startId);
 

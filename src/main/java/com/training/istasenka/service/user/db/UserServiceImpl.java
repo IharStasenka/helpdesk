@@ -1,6 +1,8 @@
 package com.training.istasenka.service.user.db;
 
+import com.training.istasenka.converter.user.UserConverter;
 import com.training.istasenka.dto.user.EngineerRatingDto;
+import com.training.istasenka.dto.user.UserDto;
 import com.training.istasenka.exception.CustomIllegalArgumentException;
 import com.training.istasenka.model.user.User;
 import com.training.istasenka.repository.user.UserRepository;
@@ -25,6 +27,7 @@ import java.util.List;
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+    private final UserConverter userConverter;
     private final KeycloakUserService keycloakUserService;
     private final StreamsBuilderFactoryBean factoryBean;
 
@@ -39,9 +42,9 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     @CacheEvict(cacheNames = "cache.users", allEntries = true)
-    public Long addUser(User user) {
-        keycloakUserService.postUser(user);
-        return userRepository.save(user).getUserId();
+    public Long addUser(UserDto userDto) {
+        keycloakUserService.postUser(userDto);
+        return userRepository.save(userConverter.convertUserDtoToUser(userDto)).getUserId();
     }
 
     @Override
@@ -74,7 +77,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public EngineerRatingDto getEngineerRating(String engineerEmail) {
         getUser(engineerEmail);
-        final KafkaStreams kafkaStreams =  factoryBean.getKafkaStreams();
+        final KafkaStreams kafkaStreams = factoryBean.getKafkaStreams();
         if (kafkaStreams != null) {
             final ReadOnlyKeyValueStore<String, EngineerRatingDto> rating = kafkaStreams.store(StoreQueryParameters.fromNameAndType("rating", QueryableStoreTypes.keyValueStore()));
             EngineerRatingDto engineerRatingDto = rating.get(engineerEmail);

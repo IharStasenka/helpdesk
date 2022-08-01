@@ -2,6 +2,7 @@ package com.training.istasenka.service.user.keycloak;
 
 import com.training.istasenka.converter.user.UserKeycloakConverter;
 import com.training.istasenka.dto.user.PasswordChange;
+import com.training.istasenka.dto.user.UserDto;
 import com.training.istasenka.dto.user.UserLoginDto;
 import com.training.istasenka.exception.CustomIllegalArgumentException;
 import com.training.istasenka.model.user.User;
@@ -14,10 +15,14 @@ import org.keycloak.representations.AccessTokenResponse;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import javax.ws.rs.NotAuthorizedException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status.Family;
+
+import static org.springframework.http.HttpStatus.*;
 
 @Service
 @RequiredArgsConstructor
@@ -29,7 +34,7 @@ public class KeycloakUserServiceImpl implements KeycloakUserService {
     String realm;
 
     @Override
-    public void postUser(User user) {
+    public void postUser(UserDto user) {
         var keycloak = keycloakProvider.getKeycloakClientCredential();
         var userRepresentation = userKeycloakConverter.convertUserToKeycloakUser(user);
         try (var response = keycloak.realm(realm).users().create(userRepresentation)) {
@@ -62,16 +67,25 @@ public class KeycloakUserServiceImpl implements KeycloakUserService {
         if (username == null || !username.equals(contextUsernameProvider.getUsername())) {
             throw new CustomIllegalArgumentException("Mismatch of context username, and username in path variable");
         }
-        var userLoginDto = getUserLoginDto(passwordChangeData, username);
-        var accessToken = getAccessToken(userLoginDto);
         var keycloak = keycloakProvider.getKeycloakClientCredential();
+        var userLoginDto = getUserLoginDto(passwordChangeData, username);
+        checkOldPassword(keycloak, userLoginDto);
         var userRepresentation = getUserRepresentation(username, keycloak);
         var keycloakUser = keycloak.realm(realm).users().get(userRepresentation.getId());
         var credential = getCredentialRepresentation(passwordChangeData);
         keycloakUser.resetPassword(credential);
-        keycloak.tokenManager().invalidate(accessToken.getToken());
-        keycloak.tokenManager().invalidate(accessToken.getRefreshToken());
         keycloakUser.logout();
+    }
+
+    private void checkOldPassword(Keycloak keycloak, UserLoginDto userLoginDto) {
+        try {
+            var accessToken = getAccessToken(userLoginDto);
+            keycloak.tokenManager().invalidate(accessToken.getToken());
+            keycloak.tokenManager().invalidate(accessToken.getRefreshToken());
+        } catch (NotAuthorizedException ex) {
+            var reasonPhrase = "Incorrect old password";
+            throw new HttpResponseException(reasonPhrase, BAD_REQUEST.value(), reasonPhrase, reasonPhrase.getBytes());
+        }
     }
 
     private UserLoginDto getUserLoginDto(PasswordChange passwordChangeData, String username) {

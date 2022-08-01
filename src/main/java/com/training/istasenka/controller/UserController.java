@@ -20,6 +20,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Email;
 
 import static org.springframework.http.HttpStatus.*;
@@ -40,7 +41,7 @@ public class UserController {
     @PostMapping
     public ResponseEntity<Long> save(@RequestBody @Validated UserDto userDto) {
 
-        var savedUserId = userService.addUser(userConverter.convertUserDtoToUser(userDto));
+        var savedUserId = userService.addUser(userDto);
 
         var currentUri = ServletUriComponentsBuilder.fromCurrentRequestUri().toUriString();
         var savedUserLocation = currentUri + "/" + savedUserId;
@@ -52,21 +53,12 @@ public class UserController {
     }
 
     @GetMapping(value = "/{name}")
-    public ResponseEntity<UserDto> getByName(@PathVariable("name") String name) {
+    public ResponseEntity<UserDto> getByName(@PathVariable("name") @Email String name) {
         var user = userService.getUser(name);
         return ResponseEntity
                 .status(OK)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(userDtoAssembler.toModel(user));
-    }
-
-    @PutMapping(value = "/{id}")
-    public ResponseEntity<Void> update(
-            @PathVariable("id") Long id,
-            @RequestBody @Validated UserDto userDto) {
-        userService.updateUser(userConverter.convertUserDtoToUser(userDto), id);
-
-        return ResponseEntity.status(NO_CONTENT).build();
     }
 
     @DeleteMapping(value = "/{name}")
@@ -93,7 +85,7 @@ public class UserController {
     @PutMapping("/{username}/changePassword")
     public ResponseEntity<Void> changePassword(
             @PathVariable @Email String username,
-            @RequestBody @Validated PasswordChange passwordChangeData) {
+            @RequestBody @Valid PasswordChange passwordChangeData) {
         keycloakUserService.changePassword(passwordChangeData, username);
         return ResponseEntity.status(NO_CONTENT).build();
     }

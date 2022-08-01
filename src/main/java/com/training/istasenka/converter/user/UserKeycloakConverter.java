@@ -1,6 +1,6 @@
 package com.training.istasenka.converter.user;
 
-import com.training.istasenka.model.user.User;
+import com.training.istasenka.dto.user.UserDto;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.mapstruct.DecoratedWith;
 import org.mapstruct.Mapper;
@@ -12,5 +12,5 @@ public interface UserKeycloakConverter {
 
     @Mapping(target = "email", source = "email")
     @Mapping(target = "username", source = "email")
-    UserRepresentation convertUserToKeycloakUser(User user);
+    UserRepresentation convertUserToKeycloakUser(UserDto userDto);
 }

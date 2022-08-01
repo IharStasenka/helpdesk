@@ -11,7 +11,8 @@ import lombok.*;
 @EqualsAndHashCode(callSuper = false)
 @PasswordsMatch(
         password = "newPassword",
-        confirmPassword = "confirmation"
+        confirmPassword = "confirmation",
+        message = "Passwords must be equal"
 )
 public class PasswordChange {
     @Password

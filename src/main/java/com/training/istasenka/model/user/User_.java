@@ -12,14 +12,12 @@ import javax.persistence.metamodel.StaticMetamodel;
 public class User_ {
     public static volatile SingularAttribute<User, String> lastName;
     public static volatile SingularAttribute<User, String> firstName;
-    public static volatile SingularAttribute<User, String> password;
     public static volatile SingularAttribute<User, UserRole> role;
     public static volatile SingularAttribute<User, Long> userId;
     public static volatile SingularAttribute<User, String> email;
 
     public static final String LAST_NAME = "lastName";
     public static final String FIRST_NAME = "firstName";
-    public static final String PASSWORD = "password";
     public static final String ROLE = "role";
     public static final String USER_ID = "userId";
     public static final String EMAIL = "email";

@@ -27,7 +27,7 @@ public class AttachmentServiceImpl implements AttachmentService {
     @Override
     @Transactional
     @HistoryAudit
-    public List<Long> createAttachments(Long ticketId, List<Attachment> attachments) throws IOException {
+    public List<Long> createAttachments(Long ticketId, List<Attachment> attachments) {
         var ticket = ticketService.getTicketById(ticketId);
         attachments.forEach(attachment -> attachment.setTicket(ticket));
         return attachmentRepository.saveAll(attachments).stream().map(Attachment::getId).collect(Collectors.toList());
@@ -47,7 +47,7 @@ public class AttachmentServiceImpl implements AttachmentService {
         ticketService.validateTicketResourceById(ticketId);
         return attachmentRepository
                 .findById(attachmentId)
-                .orElseThrow(() -> new AttachmentNotFoundException(String.format("There are no attachment with id % d", attachmentId)));
+                .orElseThrow(() -> new AttachmentNotFoundException(attachmentId));
     }
 
     @Override

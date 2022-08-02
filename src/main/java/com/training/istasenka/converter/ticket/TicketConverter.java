@@ -18,7 +18,6 @@ public interface TicketConverter {
 
     TicketConverter INSTANCE = Mappers.getMapper(TicketConverter.class);
 
-
     @Mapping(target = "description", ignore = true)
     @Mapping(target = "category", ignore = true)
     @Mapping(target = "owner", ignore = true)
@@ -32,7 +31,6 @@ public interface TicketConverter {
     @Mapping(target = "comments", ignore = true)
     @DoIgnore
     TicketDto convertFromTicket(Ticket ticket);
-
 
     List<TicketDto> convertFromTicketSet(List<Ticket> tickets);
 

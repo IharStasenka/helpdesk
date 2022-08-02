@@ -58,7 +58,7 @@ public class FeedbackServiceImpl implements FeedbackService {
         ticketService.validateTicketResourceById(ticketId);
         return feedbackRepository
                 .findById(feedbackId)
-                .orElseThrow(() -> new FeedbackNotFoundException(String.format("No such feedback with id %d", feedbackId)));
+                .orElseThrow(() -> new FeedbackNotFoundException(feedbackId));
     }
 
     @MailAudit

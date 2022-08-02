@@ -34,7 +34,7 @@ public class CommentServiceImpl implements CommentService {
         validateTicketResourceById(ticketId);
         Comment cachedComment = commentRepository
                 .findById(commentId)
-                .orElseThrow(() -> new CommentNotFoundException(String.format("No such comment with id %d", commentId)));
+                .orElseThrow(() -> new CommentNotFoundException(commentId));
         isConsistentTicketId(cachedComment, commentId, ticketId);
         return cachedComment;
     }

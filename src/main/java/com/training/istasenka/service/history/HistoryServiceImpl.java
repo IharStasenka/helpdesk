@@ -1,6 +1,7 @@
 package com.training.istasenka.service.history;
 
 import com.training.istasenka.exception.CustomIllegalArgumentException;
+import com.training.istasenka.exception.HistoryNotFoundException;
 import com.training.istasenka.exception.TicketNotFoundException;
 import com.training.istasenka.model.history.History;
 import com.training.istasenka.repository.history.HistoryRepository;
@@ -23,7 +24,9 @@ public class HistoryServiceImpl implements HistoryService {
     @Override
     public History getHistoryById(Long ticketId, Long historyId) {
         ticketService.validateTicketResourceById(ticketId);
-        var history = historyRepository.findById(historyId).orElseThrow(() -> new TicketNotFoundException(""));
+        var history = historyRepository
+                .findById(historyId)
+                .orElseThrow(() -> new HistoryNotFoundException(historyId));
         if (!history.getTicket().getId().equals(historyId)) {
             throw new CustomIllegalArgumentException("TicketId is not consistent with historyId");
         }

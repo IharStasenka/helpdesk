@@ -3,7 +3,7 @@ package com.training.istasenka.exception;
 import java.util.NoSuchElementException;
 
 public class FeedbackNotFoundException extends NoSuchElementException {
-    public FeedbackNotFoundException(String message) {
-        super(message);
+    public FeedbackNotFoundException(Long feedbackId) {
+        super(String.format("No such feedback with id %d", feedbackId));
     }
 }

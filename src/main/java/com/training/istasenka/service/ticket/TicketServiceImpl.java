@@ -10,8 +10,8 @@ import com.training.istasenka.model.category.Category;
 import com.training.istasenka.model.comment.Comment;
 import com.training.istasenka.model.ticket.Ticket;
 import com.training.istasenka.model.user.User;
+import com.training.istasenka.provider.specification.ticket.role.UserRoleSpecificationProviders;
 import com.training.istasenka.repository.specification.ticket.FilterTicketSpecification;
-import com.training.istasenka.provider.specification.ticket.role.RoleSpecificationProvider;
 import com.training.istasenka.repository.specification.ticket.TicketIdSpecification;
 import com.training.istasenka.repository.ticket.TicketRepository;
 import com.training.istasenka.service.category.CategoryService;
@@ -32,7 +32,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.training.istasenka.util.StatusType.DRAFT;
@@ -45,7 +44,7 @@ public class  TicketServiceImpl implements TicketService {
 
     private final TicketRepository ticketRepository;
     private final UserService userService;
-    private final Map<UserRole, RoleSpecificationProvider> userRoleSpecificationProviders;
+    private final UserRoleSpecificationProviders userRoleSpecificationProviders;
     private final CategoryService categoryService;
 
     @Override
@@ -53,17 +52,16 @@ public class  TicketServiceImpl implements TicketService {
     @Cacheable(cacheNames = "cache.tickets", key = "#id.toString().concat('-').concat(@contextUsernameProvider.getUsername())")
     public Boolean validateTicketResourceById(Long id) {
         ticketRepository.findById(id)
-                .orElseThrow(() -> new TicketNotFoundException(String.format("There are no ticket with id: %d", id)));
+                .orElseThrow(() -> new TicketNotFoundException(id));
         validateContextUserForTicketById(id);
         return true;
     }
 
     @Override
     public void validateTicketResourceByIdByEmail(Long ticketId, String email) {
-        if (!isAccessibleUserForTicketById(ticketId, userService.getUser(email))) {
+        if (isNotAccessibleUserForTicketById(ticketId, userService.getUser(email))) {
             throw new AccessDeniedException(String.format("Current user is not accessible for ticket with id %d", ticketId));
         }
-
     }
 
     @Override
@@ -83,7 +81,7 @@ public class  TicketServiceImpl implements TicketService {
         validateContextUserForTicketById(ticketId);
         return ticketRepository
                 .findOne(getTicketByIdSpecification(ticketId))
-                .orElseThrow(() -> new TicketNotFoundException(String.format("There are no ticket with id: %d", ticketId)));
+                .orElseThrow(() -> new TicketNotFoundException(ticketId));
     }
 
 
@@ -93,7 +91,7 @@ public class  TicketServiceImpl implements TicketService {
         validateTicketResourceByIdByEmail(ticketId, email);
         return ticketRepository
                 .findOne(getTicketByIdSpecification(ticketId))
-                .orElseThrow(() -> new TicketNotFoundException(String.format("There are no ticket with id: %d", ticketId)));
+                .orElseThrow(() -> new TicketNotFoundException(ticketId));
     }
 
     @Override
@@ -155,17 +153,17 @@ public class  TicketServiceImpl implements TicketService {
 
 
     private void validateContextUserForTicketById(Long id) {
-        if (!isAccessibleUserForTicketById(id, this.getUserFromSecurityContext())) {
+        if (isNotAccessibleUserForTicketById(id, this.getUserFromSecurityContext())) {
             throw new AccessDeniedException(String.format("Current user is not accessible for ticket with id %d", id));
         }
     }
 
-    private boolean isAccessibleUserForTicketById(Long ticketId, User contextUser) {
+    private boolean isNotAccessibleUserForTicketById(Long ticketId, User contextUser) {
         return ticketRepository
                 .findAll(getContextUserByRoleSpecification(false, contextUser))
                 .stream()
                 .map(Ticket::getId)
-                .anyMatch(id -> id.equals(ticketId));
+                .noneMatch(id -> id.equals(ticketId));
     }
 
     private void setTicketAdjustedUsers(TicketActionType action, Ticket ticket, User contextUser, UserRole userRole) {
@@ -225,7 +223,7 @@ public class  TicketServiceImpl implements TicketService {
 
     private Specification<Ticket> getContextUserByRoleSpecification(Boolean myTicketFilterStatus, User contextUser) {
 
-        return userRoleSpecificationProviders
+        return userRoleSpecificationProviders.getUserRoleSpecificationProviders()
                 .get(contextUser.getRole())
                 .getSpecificationForFindAllTickets(contextUser.getEmail(), myTicketFilterStatus);
     }
